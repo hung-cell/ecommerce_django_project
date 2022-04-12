@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type`="text/css" href="{% static 'css/main.css' %}">
+    <!-- CSS only -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Ecom</title>
+    <script type="text/javascript">
+        var user = '{{request.user}}'
+
+        function getToken(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        var csrftoken = getToken('csrftoken')
+
+
+
+    </script>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info">
+        <a class="navbar-brand" href="{%url 'store'%}">Ecom</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{%url 'store'%}">Store <span class="sr-only">(current)</span></a>
+                </li>
+                {% if request.get_full_path == '/' or 'category' in request.get_full_path%}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Categories
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% for category in categories %}
+                        <a class="dropdown-item"
+                            href="{% url 'store' %}?category={{ category.name }}">{{category.name}}</a>
+
+                        {% endfor %}
+                    </div>
+
+                </li>
+                {%endif %}
+            </ul>
+            <form class="d-flex mr-auto" action="{% url 'search' %}" method="get">
+
+                <input class="form-control me-2" width="400px" type="text" name="query" placeholder="Type name product"
+                    aria-label="Search">
+
+                <button class="btn btn-primary"><i style="font-size:20px" class="fa fa-search"></i></button>
+            </form>
+
+
+            <div class="form-inline my-2 my-lg-0">
+                {% if request.user.is_authenticated %}
+                <p class="btn btn-success"
+                    style="cursor: context-menu;margin-right:10px;margin-bottom:0px;display:inline-block">
+                    {{request.user.email}}</p>
+                <a href="{%url 'logout'%}" class="btn btn-warning">Logout</a>
+                {%else%}
+                <a href="{%url 'login'%}" class="btn btn-success">Login</a>
+
+                {%endif%}
+                <a href="{%url 'cart'%}">
+                    <img id="cart-icon" src="{% static 'images/cart.png' %}">
+                </a>
+
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block content %}
+
+        {% endblock content %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+</body>
+
+</html>
