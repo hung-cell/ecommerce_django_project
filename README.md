@@ -18,7 +18,7 @@ pip install Django==4.0.4
 ```
 You also need to install Pillow-9.1.0 to use ImageFiled
 ```bash
-pip install Django==9.1.0
+pip install Pillow==9.1.0
 ```
 ## Migrate
 You need to apply migrations to your project
